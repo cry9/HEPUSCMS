@@ -26,7 +26,11 @@ t2 = []
 #time for final graph
 x1 = ['']*519
 t1 = []
-
+#positions for dashed lines\
+#for room data
+x2_positions = [0, 200, 400, 600, 800, 1016]
+#for chamber data
+x1_positions = [0,100,200,300,400,519]
 #%%% Loading the csv file for reading with earlier data in read mode
 #using pandas as earlier ways of reading did not allow column selection
 #frame1 is a variable created to hold the data frame loaded in using the read_csv module from the pandas "pd" library
@@ -118,6 +122,8 @@ plt.ylabel("Room Temperature (Deg C)")
 plt.ylim(-20,100)
 plt.xticks(t2, x2)
 plt.xticks(rotation = 30)
+for x in x2_positions:
+    plt.axvline(x=x, color = 'b', linestyle = '--', linewidth = 2)
 plt.show()
 
 plt.figure()
@@ -127,10 +133,11 @@ plt.plot(t1,chamber_temp, label='Chamber Temp', color = 'green')
 #plt.plot(chamber_temp, label = 'Chamber Temp', color = 'green')
 plt.plot(t1,chamber_dew_point, label = 'Dew Point', color = 'red')
 #plt.plot(chamber_dew_point, label = 'Dew Point', color = 'red')
-plt.ylabel("%RH, Chamber Temp, & Dew Point (Deg C)")
 plt.ylim(-100,100)
 plt.xticks(t1,x1)
 plt.xticks(rotation = 30)
+for x in x1_positions:
+    plt.axvline(x=x, color = 'b', linestyle = '--', linewidth = 2)
 plt.legend()
 plt.show()
 
