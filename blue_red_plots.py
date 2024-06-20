@@ -21,26 +21,28 @@ RH1 = []
 #calculated dew point for chamber temp
 chamber_dew_point = []
 #time for room graph
-x2 = ['']*1016
 t2 = []
 #time for final graph
-x1 = ['']*519
 t1 = []
-#positions for dashed lines\
+#positions for dashed lines are hard coded for now
 #for room data
-x2_positions = [0, 200, 400, 600, 800, 1016]
+x2_positions = [0, 200, 400, 600, 800, 1000]
 #for chamber data
-x1_positions = [0,100,200,300,400,519]
+x1_positions = [0,100,200,300,400,500]
+
 #%%% Loading the csv file for reading with earlier data in read mode
 #using pandas as earlier ways of reading did not allow column selection
 #frame1 is a variable created to hold the data frame loaded in using the read_csv module from the pandas "pd" library
-#below for the chamber data 
-frame1 = pd.read_csv('samples-2024-06-09T23 05 29Z.csv')
+name1 = input('csv for the chamber: \n')
+#below and above for the chamber data and name1 is for input from the terminal for automated .csv file reading
+frame1 = pd.read_csv(f'{name1}.csv')
 #reversing order of the data saved using pandas [:rows, :columns] so [:,::-1] would have reversed the columns
 frame1_reverse_rows = frame1.iloc[::-1, :]
 
+#name2 will be for inputing which file to read from for the room data
+name2 = input('csv for the room: \n')
 #for room temp we'll use pandas to read
-data1 = pd.read_csv('samples-2024-05-20T23 07 33Z.csv')
+data1 = pd.read_csv(f'{name2}.csv')
 #flipping the rows for reading
 data1_reverse_rows = data1.iloc[::-1, :]
 
@@ -51,52 +53,38 @@ room_temp = data1_reverse_rows['RA3E-F52ABC Red [Temperature](1)Temperature(F°)
 chamber_temp = frame1_reverse_rows['RA3E-F52ABC Blue [Temperature & Humidity](2)Temperature(F°)'].tolist()
 #%RH for earlier data
 RH1 = frame1_reverse_rows['RA3E-F52ABC Blue [Temperature & Humidity](2)Humidity(%RH)'].tolist()
-#t2 is for the room data and t1 is for the chamber data
+#t2 is for the room data and t1 is for the chamber data, similarly for x2 and x1
 t2 = data1_reverse_rows['Timestamp (America/Chicago)'].tolist()
 t1 = frame1_reverse_rows['Timestamp (America/Chicago)'].tolist()
-
+x2 = ['']*len(t2)
+x1 = ['']*len(t1)
 #making axes for both of our eventually plotted graphs
 i = 0
-while i != 1016:
+while i != len(t2):
     if i % 200 == 0:
         x2[i] = t2[i]
     i += 1
 i = 0
-while i != 519:
+while i != len(t1):
     if i % 100 == 0:
         x1[i] = t1[i]
     i += 1
-i = 0 
-'''
-#testing
-while i != 1016:
-    print(room_temp[i])
-    i += 1
-
-i = 0
-while i != 519:
-    print(t1[i])    
-    i += 1
-'''
+    
 #%%% Calculating degrees celsius for each temperature that's recorded as fahrenheit
 #(5/9)(Tf-32) = Tc where Tf is deg F and Tc is degrees Celsius
 i = 0
-while i != 1016:
+while i != len(t2):
      
     room_temp[i] = (5/9)*(room_temp[i]-32)
     i+=1
 #also for the higher temp
 i = 0
-while i != 519:
+while i != len(t1):
      
     chamber_temp[i] = (5/9)*(chamber_temp[i]-32)
     i+=1  
 
 #%%% Calculating the dew point 
-#Ts = (b*alpha(T,RH)) / (a - alpha(T,RH))
-#where Ts is dew point in celsius
-#T is recorded temperature for the room in celcius
-#a = 17.625, b = 243.04 and alpha(T,RH) = ln(RH/100) +aT/(b+T)
 #defining necessary variables
 a = 17.625
 b = 243.040
@@ -108,9 +96,7 @@ def calculate_alpha(T,RH):
 
 #%%% Dew point calculation
 i= 0
-
-while i != 519:
-    
+while i != len(t1):
     chamber_dew_point.append(b*calculate_alpha(int(chamber_temp[i]), RH1[i]) / (a - calculate_alpha(int(chamber_temp[i]), RH1[i])) )
     i+=1    
 
