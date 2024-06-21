@@ -24,11 +24,10 @@ chamber_dew_point = []
 t2 = []
 #time for final graph
 t1 = []
-#positions for dashed lines are hard coded for now
-#for room data
-x2_positions = [0, 200, 400, 600, 800, 1000]
-#for chamber data
-x1_positions = [0,100,200,300,400,500]
+#positions will be for which part of each string for the time data to omit
+positions = [[0,3],[5,20]]
+#x2_positions is for x-axis positions of blue lines for the room data csv file and positions is for the places where we want to omit characters from the time list
+x2_positions = [0]
 
 #%%% Loading the csv file for reading with earlier data in read mode
 #using pandas as earlier ways of reading did not allow column selection
@@ -58,32 +57,52 @@ t2 = data1_reverse_rows['Timestamp (America/Chicago)'].tolist()
 t1 = frame1_reverse_rows['Timestamp (America/Chicago)'].tolist()
 x2 = ['']*len(t2)
 x1 = ['']*len(t1)
-#making axes for both of our eventually plotted graphs
+#for only the days to save
+t2_days = [None]*len(t2)
+#making axes for both of our eventually plotted graphs first room
 i = 0
 while i != len(t2):
+    #this needs to be the same interval as the one between each x-axis on the default plot
     if i % 200 == 0:
+        #so that we get data for each line on the x-axis
         x2[i] = t2[i]
+    #saving the current index of the list for the times from the timestamp into a variable called text
+    text = str(t2[i])
+    #here we will truncate the t2 list so that it only has year and day left
+    offsetNextIndexes = 0
+    #for loop using position as indexing variable
+    for position in positions:
+        #here we omit the characters that we dont need for the current element we are on as we are looping through the time array
+        text = text[:position[0] + offsetNextIndexes] + text[position[1] + offsetNextIndexes:]
+        offsetNextIndexes += position[0] - position[1]
+    #saving the concatinated string into the same index for the day list
+    t2_days[i] = text  
     i += 1
+#now the chamber
 i = 0
 while i != len(t1):
     if i % 100 == 0:
-        x1[i] = t1[i]
-    i += 1
+        x1[i] = t1[i]   
+    i+=1
+#now for the positions of the dashed lines being a day between each other for room data
+i = 1
+while i != len(t2):
+    if int(t2_days[i]) != int(t2_days[i-1]):
+        x2_positions.append(i)    
+    i+=1    
     
 #%%% Calculating degrees celsius for each temperature that's recorded as fahrenheit
 #(5/9)(Tf-32) = Tc where Tf is deg F and Tc is degrees Celsius
 i = 0
 while i != len(t2):
-     
     room_temp[i] = (5/9)*(room_temp[i]-32)
     i+=1
 #also for the higher temp
 i = 0
 while i != len(t1):
-     
     chamber_temp[i] = (5/9)*(chamber_temp[i]-32)
     i+=1  
-
+    
 #%%% Calculating the dew point 
 #defining necessary variables
 a = 17.625
@@ -122,10 +141,5 @@ plt.plot(t1,chamber_dew_point, label = 'Dew Point', color = 'red')
 plt.ylim(-100,100)
 plt.xticks(t1,x1)
 plt.xticks(rotation = 30)
-for x in x1_positions:
-    plt.axvline(x=x, color = 'b', linestyle = '--', linewidth = 2)
 plt.legend()
 plt.show()
-
-
-
