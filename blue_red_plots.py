@@ -63,7 +63,7 @@ t2_days = [None]*len(t2)
 i = 0
 while i != len(t2):
     #this needs to be the same interval as the one between each x-axis on the default plot
-    if i % 200 == 0:
+    if i % 25 == 0:
         #so that we get data for each line on the x-axis
         x2[i] = t2[i]
     #saving the current index of the list for the times from the timestamp into a variable called text
