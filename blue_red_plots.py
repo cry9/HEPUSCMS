@@ -22,12 +22,13 @@ RH1 = []
 chamber_dew_point = []
 #time for room graph
 t2 = []
-#time for final graph
+#time for final chamber graph
 t1 = []
 #positions will be for which part of each string for the time data to omit
 positions = [[0,3],[5,20]]
 #x2_positions is for x-axis positions of blue lines for the room data csv file and positions is for the places where we want to omit characters from the time list
 x2_positions = [0]
+#x1_positions = [0]
 
 #%%% Loading the csv file for reading with earlier data in read mode
 #using pandas as earlier ways of reading did not allow column selection
@@ -57,13 +58,15 @@ t2 = data1_reverse_rows['Timestamp (America/Chicago)'].tolist()
 t1 = frame1_reverse_rows['Timestamp (America/Chicago)'].tolist()
 x2 = ['']*len(t2)
 x1 = ['']*len(t1)
-#for only the days to save
+#for only the days to save for the room
 t2_days = [None]*len(t2)
+#t1_days is chamber
+#t1_days = [None]*len(t1)
 #making axes for both of our eventually plotted graphs first room
 i = 0
 while i != len(t2):
     #this needs to be the same interval as the one between each x-axis on the default plot
-    if i % 25 == 0:
+    if i % 50 == 0:
         #so that we get data for each line on the x-axis
         x2[i] = t2[i]
     #saving the current index of the list for the times from the timestamp into a variable called text
@@ -79,18 +82,45 @@ while i != len(t2):
     t2_days[i] = text  
     i += 1
 #now the chamber
+'''ran into problems here
+i = 0
+while i != len(t1):
+    #this needs to be the same interval as the one between each x-axis on the default plot
+    if i % 100 == 0:
+        #so that we get data for each line on the x-axis
+        x1[i] = t1[i]
+    #saving the current index of the list for the times from the timestamp into a variable called text
+    text1 = str(t1[i])
+    #here we will truncate the t2 list so that it only has year and day left
+    offsetNextIndexes = 0
+    #for loop using position as indexing variable
+    for position in positions:
+        #here we omit the characters that we dont need for the current element we are on as we are looping through the time array
+        text = text[:position[0] + offsetNextIndexes] + text[position[1] + offsetNextIndexes:]
+        offsetNextIndexes += position[0] - position[1]
+    #saving the concatinated string into the same index for the day list
+    t1_days[i] = text1  
+    i += 1
+'''
 i = 0
 while i != len(t1):
     if i % 100 == 0:
         x1[i] = t1[i]   
     i+=1
+'''this did not work
+#now for the chamber
+i = 1
+while i != len(t1):
+    if int(t1_days[i]) != int(t1_days[i-1]):
+        x1_positions.append(i)
+'''
 #now for the positions of the dashed lines being a day between each other for room data
 i = 1
 while i != len(t2):
     if int(t2_days[i]) != int(t2_days[i-1]):
         x2_positions.append(i)    
     i+=1    
-    
+
 #%%% Calculating degrees celsius for each temperature that's recorded as fahrenheit
 #(5/9)(Tf-32) = Tc where Tf is deg F and Tc is degrees Celsius
 i = 0
