@@ -33,14 +33,14 @@ x1_positions = [0]
 #%%% Loading the csv file for reading with earlier data in read mode
 #using pandas as earlier ways of reading did not allow column selection
 #frame1 is a variable created to hold the data frame loaded in using the read_csv module from the pandas "pd" library
-name1 = input('csv for the chamber: \n')
+name1 = input('Please enter the .csv file name without ".csv" at the end for the chamber: \n')
 #below and above for the chamber data and name1 is for input from the terminal for automated .csv file reading
 frame1 = pd.read_csv(f'{name1}.csv')
 #reversing order of the data saved using pandas [:rows, :columns] so [:,::-1] would have reversed the columns
 frame1_reverse_rows = frame1.iloc[::-1, :]
 
 #name2 will be for inputing which file to read from for the room data
-name2 = input('csv for the room: \n')
+name2 = input('Please enter the .csv file name without ".csv" at the end for the room: \n')
 #for room temp we'll use pandas to read
 data1 = pd.read_csv(f'{name2}.csv')
 #flipping the rows for reading
