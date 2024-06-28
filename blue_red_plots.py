@@ -28,7 +28,7 @@ t1 = []
 positions = [[0,3],[5,20]]
 #x2_positions is for x-axis positions of blue lines for the room data csv file and positions is for the places where we want to omit characters from the time list
 x2_positions = [0]
-#x1_positions = [0]
+x1_positions = [0]
 
 #%%% Loading the csv file for reading with earlier data in read mode
 #using pandas as earlier ways of reading did not allow column selection
@@ -61,7 +61,7 @@ x1 = ['']*len(t1)
 #for only the days to save for the room
 t2_days = [None]*len(t2)
 #t1_days is chamber
-#t1_days = [None]*len(t1)
+t1_days = [None]*len(t1)
 #making axes for both of our eventually plotted graphs first room
 i = 0
 while i != len(t2):
@@ -82,7 +82,7 @@ while i != len(t2):
     t2_days[i] = text  
     i += 1
 #now the chamber
-'''ran into problems here
+'''
 i = 0
 while i != len(t1):
     #this needs to be the same interval as the one between each x-axis on the default plot
@@ -107,7 +107,7 @@ while i != len(t1):
     if i % 100 == 0:
         x1[i] = t1[i]   
     i+=1
-'''this did not work
+'''
 #now for the chamber
 i = 1
 while i != len(t1):
@@ -151,17 +151,21 @@ while i != len(t1):
 
 #%%% 
 plt.figure()
+for x in x2_positions:
+    plt.axvline(x=x, color = 'grey', linestyle = '--', linewidth = 2)
 plt.plot(t2,room_temp, label='Room Temp', color = 'blue')
 #plt.plot(room_temp )
 plt.ylabel("Room Temperature (Deg C)")
 plt.ylim(-20,100)
 plt.xticks(t2, x2)
 plt.xticks(rotation = 30)
-for x in x2_positions:
-    plt.axvline(x=x, color = 'b', linestyle = '--', linewidth = 2)
 plt.show()
 
 plt.figure()
+'''
+for x in x1_positions:
+    plt.axvline(x=x, color = 'grey', linestyle = '--', linewidth = 2)
+'''    
 plt.plot(t1,RH1, label = '%RH', color = 'blue')
 #plt.plot(RH1, label = '%RH', color = 'blue')
 plt.plot(t1,chamber_temp, label='Chamber Temp', color = 'green')
@@ -173,3 +177,5 @@ plt.xticks(t1,x1)
 plt.xticks(rotation = 30)
 plt.legend()
 plt.show()
+
+
