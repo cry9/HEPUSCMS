@@ -80,6 +80,8 @@ while i != len(t2):
         offsetNextIndexes += position[0] - position[1]
     #saving the concatinated string into the same index for the day list
     t2_days[i] = text  
+    #testing
+    #print(t2_days[i])
     i += 1
 #now the chamber
 '''
@@ -96,10 +98,12 @@ while i != len(t1):
     #for loop using position as indexing variable
     for position in positions:
         #here we omit the characters that we dont need for the current element we are on as we are looping through the time array
-        text = text[:position[0] + offsetNextIndexes] + text[position[1] + offsetNextIndexes:]
+        text1 = text1[:position[0] + offsetNextIndexes] + text1[position[1] + offsetNextIndexes:]
         offsetNextIndexes += position[0] - position[1]
     #saving the concatinated string into the same index for the day list
-    t1_days[i] = text1  
+    t1_days[i] = text1 
+    #testing
+    #print(t1_days[i])
     i += 1
 '''
 i = 0
