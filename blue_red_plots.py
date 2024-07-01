@@ -84,40 +84,12 @@ while i != len(t2):
     #print(t2_days[i])
     i += 1
 #now the chamber
-'''
-i = 0
-while i != len(t1):
-    #this needs to be the same interval as the one between each x-axis on the default plot
-    if i % 100 == 0:
-        #so that we get data for each line on the x-axis
-        x1[i] = t1[i]
-    #saving the current index of the list for the times from the timestamp into a variable called text
-    text1 = str(t1[i])
-    #here we will truncate the t2 list so that it only has year and day left
-    offsetNextIndexes = 0
-    #for loop using position as indexing variable
-    for position in positions:
-        #here we omit the characters that we dont need for the current element we are on as we are looping through the time array
-        text1 = text1[:position[0] + offsetNextIndexes] + text1[position[1] + offsetNextIndexes:]
-        offsetNextIndexes += position[0] - position[1]
-    #saving the concatinated string into the same index for the day list
-    t1_days[i] = text1 
-    #testing
-    #print(t1_days[i])
-    i += 1
-'''
 i = 0
 while i != len(t1):
     if i % 100 == 0:
         x1[i] = t1[i]   
     i+=1
-'''
-#now for the chamber
-i = 1
-while i != len(t1):
-    if int(t1_days[i]) != int(t1_days[i-1]):
-        x1_positions.append(i)
-'''
+
 #now for the positions of the dashed lines being a day between each other for room data
 i = 1
 while i != len(t2):
@@ -165,11 +137,7 @@ plt.xticks(t2, x2)
 plt.xticks(rotation = 30)
 plt.show()
 
-plt.figure()
-'''
-for x in x1_positions:
-    plt.axvline(x=x, color = 'grey', linestyle = '--', linewidth = 2)
-'''    
+plt.figure()   
 plt.plot(t1,RH1, label = '%RH', color = 'blue')
 #plt.plot(RH1, label = '%RH', color = 'blue')
 plt.plot(t1,chamber_temp, label='Chamber Temp', color = 'green')
