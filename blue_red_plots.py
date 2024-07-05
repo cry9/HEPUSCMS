@@ -27,7 +27,7 @@ t1 = []
 #positions will be for which part of each string for the time data to omit
 positions = [[0,3],[5,20]]
 #similar idea for whole_dates as positions, only now we plan to save whole dates
-#whole_dates = [[5,20]]
+whole_dates = [[5,20]]
 #x2_positions is for x-axis positions of blue lines for the room data csv file 
 x2_positions = [0]
 
@@ -60,18 +60,21 @@ t2 = data1_reverse_rows['Timestamp (America/Chicago)'].tolist()
 t1 = frame1_reverse_rows['Timestamp (America/Chicago)'].tolist()
 x2 = ['']*len(t2)
 x1 = ['']*len(t1)
+x2_b = ['']*len(t2)
+x1_b = ['']*len(t1)
 #for only the days to save for the room
 t2_days = [None]*len(t2)
+t2_both = [None]*len(t2)
+t1_days = [None]*len(t1)
+t1_both = [None]*len(t1)
 #making axes for both of our eventually plotted graphs first room
 i = 0
 while i != len(t2):
-    #this needs to be the same interval as the one between each x-axis on the default plot
-    if i % 50 == 0:
-        #so that we get data for each line on the x-axis
-        x2[i] = t2[i]
     #saving the current index of the list for the times from the timestamp into a variable called text
     text = str(t2[i])
-    #here we will truncate the t2 list so that it only has year and day left
+    #for both the month and day
+    text1 = str(t2[i])
+    #here we will truncate the t2 list so that it only has days left
     offsetNextIndexes = 0
     #for loop using position as indexing variable
     for position in positions:
@@ -80,16 +83,51 @@ while i != len(t2):
         offsetNextIndexes += position[0] - position[1]
     #saving the concatinated string into the same index for the day list
     t2_days[i] = text  
+    #now we will have a list with both month and day left
+    offsetNextIndexes = 0
+    for day in whole_dates:
+        # doing the same operation as before in the above for loop
+        text1 = text1[:day[0] + offsetNextIndexes] + text1[day[1] + offsetNextIndexes:]
+        offsetNextIndexes += day[0] - day[1]
+    #saving
+    t2_both[i] = text1
     #testing
     #print(t2_days[i])
+    #this needs to be the same interval as the one between each x-axis on the default plot
+    if i % 50 == 0:
+        #so that we get data for each line on the x-axis
+        x2[i] = t2[i]
+        x2_b[i] = t2_both[i]
+    #incrementing
     i += 1
+    
 #now the chamber
 i = 0
 while i != len(t1):
+    #getting just the day
+    text2 = str(t1[i])
+    offsetNextIndexes = 0
+    for j in positions:
+        text2 = text2[:j[0] + offsetNextIndexes] + text2[j[1] + offsetNextIndexes:]
+        offsetNextIndexes += j[0] - j[1]
+    #saving
+    t1_days[i] = text2
+    #getting just month and day
+    text3 = str(t1[i])
+    offsetNextIndexes = 0
+    for j in whole_dates:
+        text3 = text3[:j[0] + offsetNextIndexes] + text3[j[1] + offsetNextIndexes:]
+        offsetNextIndexes += j[0] - j[1]
+    t1_both[i] = text3
+    #testing
+    #print(t1_both[i])
+    #here to have displayed timestamps
     if i % 100 == 0:
         x1[i] = t1[i]   
+        x1_b[i] = t1_both[i]
     i+=1
-
+#testing
+#print(x1_b)
 #now for the positions of the dashed lines being a day between each other for room data
 i = 1
 while i != len(t2):
@@ -133,7 +171,7 @@ plt.plot(t2,room_temp, label='Room Temp', color = 'blue')
 #plt.plot(room_temp )
 plt.ylabel("Room Temperature (Deg C)")
 plt.ylim(0,40)
-plt.xticks(t2, x2)
+plt.xticks(t2, x2_b)
 plt.xticks(rotation = 30)
 plt.show()
 
@@ -145,7 +183,7 @@ plt.plot(t1,chamber_temp, label='Chamber Temp', color = 'green')
 plt.plot(t1,chamber_dew_point, label = 'Dew Point', color = 'red')
 #plt.plot(chamber_dew_point, label = 'Dew Point', color = 'red')
 plt.ylim(-75,75)
-plt.xticks(t1,x1)
+plt.xticks(t1,x1_b)
 plt.xticks(rotation = 30)
 plt.legend()
 plt.show()
