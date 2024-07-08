@@ -24,13 +24,12 @@ chamber_dew_point = []
 t2 = []
 #time for final chamber graph
 t1 = []
-#positions will be for which part of each string for the time data to omit
+#positions will be for which part of each string for the time data to omit (list of only days)
 positions = [[0,3],[5,20]]
 #similar idea for whole_dates as positions, only now we plan to save whole dates
 whole_dates = [[5,20]]
-#x2_positions is for x-axis positions of blue lines for the room data csv file 
+#x2_positions is for x-axis positions of dashed lines for the room data csv file 
 x2_positions = [0]
-
 
 #%%% Loading the csv file for reading with earlier data in read mode
 #using pandas as earlier ways of reading did not allow column selection
@@ -95,15 +94,19 @@ while i != len(t2):
     #print(t2_days[i])
     #this needs to be the same interval as the one between each x-axis on the default plot
     if i % 50 == 0:
-        #so that we get data for each line on the x-axis
-        x2[i] = t2[i]
+        #this is saving the whole time stamp
+        #x2[i] = t2[i]
+        #so that we get month and day data for each line on the x-axis
         x2_b[i] = t2_both[i]
+    
     #incrementing
     i += 1
-    
+#list to hold the month and day corresponding to each dashed line plotted 
+x2_month_dates = [x2_b[0]]
 #now the chamber
 i = 0
 while i != len(t1):
+    '''unneccessary for now. Might bring back in if dashed lines for the chamber are possible/warranted
     #getting just the day
     text2 = str(t1[i])
     offsetNextIndexes = 0
@@ -112,6 +115,7 @@ while i != len(t1):
         offsetNextIndexes += j[0] - j[1]
     #saving
     t1_days[i] = text2
+    '''
     #getting just month and day
     text3 = str(t1[i])
     offsetNextIndexes = 0
@@ -123,7 +127,8 @@ while i != len(t1):
     #print(t1_both[i])
     #here to have displayed timestamps
     if i % 100 == 0:
-        x1[i] = t1[i]   
+        #x1[i] = t1[i]   
+        #getting data for x-axis
         x1_b[i] = t1_both[i]
     i+=1
 #testing
@@ -132,9 +137,19 @@ while i != len(t1):
 i = 1
 while i != len(t2):
     if int(t2_days[i]) != int(t2_days[i-1]):
-        x2_positions.append(i)    
-    i+=1    
-
+        #for the x-axis position of dashed lines
+        x2_positions.append(i) 
+        #for the x-axis labels planned to correspond with respective dashed lines
+        x2_month_dates.append(t2_both[i])#NEW
+    
+    else:
+        x2_month_dates.append('')
+    i += 1
+#testing
+#print(x2_month_dates)
+#print(x2_b)
+#print(x2_positions)
+#print(t2_days)
 #%%% Calculating degrees celsius for each temperature that's recorded as fahrenheit
 #(5/9)(Tf-32) = Tc where Tf is deg F and Tc is degrees Celsius
 i = 0
@@ -164,17 +179,22 @@ while i != len(t1):
     i+=1    
 
 #%%% 
-plt.figure()
+#room plot
+#plt.figure()
+fig, ax = plt.subplots()
+ax.set_xticks(x2_positions)
 for x in x2_positions:
     plt.axvline(x=x, color = 'grey', linestyle = '--', linewidth = 2)
 plt.plot(t2,room_temp, label='Room Temp', color = 'blue')
 #plt.plot(room_temp )
 plt.ylabel("Room Temperature (Deg C)")
 plt.ylim(0,40)
-plt.xticks(t2, x2_b)
+plt.xlim(0,len(t2))
+plt.xticks(t2, x2_month_dates)
 plt.xticks(rotation = 30)
 plt.show()
 
+#chamber plot
 plt.figure()   
 plt.plot(t1,RH1, label = '%RH', color = 'blue')
 #plt.plot(RH1, label = '%RH', color = 'blue')
@@ -182,6 +202,7 @@ plt.plot(t1,chamber_temp, label='Chamber Temp', color = 'green')
 #plt.plot(chamber_temp, label = 'Chamber Temp', color = 'green')
 plt.plot(t1,chamber_dew_point, label = 'Dew Point', color = 'red')
 #plt.plot(chamber_dew_point, label = 'Dew Point', color = 'red')
+plt.xlim(0, len(t1))
 plt.ylim(-75,75)
 plt.xticks(t1,x1_b)
 plt.xticks(rotation = 30)
