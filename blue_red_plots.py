@@ -180,7 +180,6 @@ while i != len(t1):
 
 #%%% 
 #room plot
-#plt.figure()
 fig, ax = plt.subplots()
 ax.set_xticks(x2_positions)
 for x in x2_positions:
@@ -188,6 +187,8 @@ for x in x2_positions:
 plt.plot(t2,room_temp, label='Room Temp', color = 'blue')
 #plt.plot(room_temp )
 plt.ylabel("Room Temperature (Deg C)")
+plt.xlabel("Time")
+plt.title("Room Temp vs. Time (Rm. 2118)")
 plt.ylim(0,40)
 plt.xlim(0,len(t2))
 plt.xticks(t2, x2_month_dates)
@@ -195,18 +196,39 @@ plt.xticks(rotation = 30)
 plt.show()
 
 #chamber plot
-plt.figure()   
+#fig, ax = plt.subplots()
+plt.figure()
+#twin1 = ax.twinx()
+#twin2 = ax.twinx()
+'''Trying to separate the y axes 
+p1 = ax.plot(t1,RH1, label = '%RH', color = 'blue')
+#plt.plot(RH1, label = '%RH', color = 'blue')
+p2 = twin1.plot(t1,chamber_temp, label='Chamber Temp', color = 'green')
+#plt.plot(chamber_temp, label = 'Chamber Temp', color = 'green')
+p3 = twin2.plot(t1,chamber_dew_point, label = 'Dew Point', color = 'red')
+#plt.plot(chamber_dew_point, label = 'Dew Point', color = 'red')
+'''
 plt.plot(t1,RH1, label = '%RH', color = 'blue')
 #plt.plot(RH1, label = '%RH', color = 'blue')
-plt.plot(t1,chamber_temp, label='Chamber Temp', color = 'green')
+plt.plot(t1,chamber_temp, label='Chamber Temp', color = 'orange')
 #plt.plot(chamber_temp, label = 'Chamber Temp', color = 'green')
 plt.plot(t1,chamber_dew_point, label = 'Dew Point', color = 'red')
 #plt.plot(chamber_dew_point, label = 'Dew Point', color = 'red')
+'''
+ax.set_xlim(0, len(t1))
+ax.set_ylim(-75,75)
+twin1.set_ylim(-75,75)
+twin2.set_ylim(-75,75)
+'''
 plt.xlim(0, len(t1))
 plt.ylim(-75,75)
+#labels now with parameters above
+plt.xlabel("Time")
+plt.ylabel("%RH, Chamber Temp, and Dew Point")
+plt.title("Chamber %RH, Temp, and Dew Point vs. Time (Rm. 2118)")
 plt.xticks(t1,x1_b)
-plt.xticks(rotation = 30)
 plt.legend()
+plt.xticks(rotation = 30)
 plt.show()
 
 
