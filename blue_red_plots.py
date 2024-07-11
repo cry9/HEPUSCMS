@@ -57,8 +57,6 @@ RH1 = frame1_reverse_rows['RA3E-F52ABC Blue [Temperature & Humidity](2)Humidity(
 #t2 is for the room data and t1 is for the chamber data, similarly for x2 and x1
 t2 = data1_reverse_rows['Timestamp (America/Chicago)'].tolist()
 t1 = frame1_reverse_rows['Timestamp (America/Chicago)'].tolist()
-x2 = ['']*len(t2)
-x1 = ['']*len(t1)
 x2_b = ['']*len(t2)
 x1_b = ['']*len(t1)
 #for only the days to save for the room
@@ -101,38 +99,20 @@ while i != len(t2):
     
     #incrementing
     i += 1
-#list to hold the month and day corresponding to each dashed line plotted 
-x2_month_dates = [x2_b[0]]
 #now the chamber
 i = 0
 while i != len(t1):
-    '''unneccessary for now. Might bring back in if dashed lines for the chamber are possible/warranted
-    #getting just the day
-    text2 = str(t1[i])
-    offsetNextIndexes = 0
-    for j in positions:
-        text2 = text2[:j[0] + offsetNextIndexes] + text2[j[1] + offsetNextIndexes:]
-        offsetNextIndexes += j[0] - j[1]
-    #saving
-    t1_days[i] = text2
-    '''
-    #getting just month and day
-    text3 = str(t1[i])
-    offsetNextIndexes = 0
-    for j in whole_dates:
-        text3 = text3[:j[0] + offsetNextIndexes] + text3[j[1] + offsetNextIndexes:]
-        offsetNextIndexes += j[0] - j[1]
-    t1_both[i] = text3
     #testing
     #print(t1_both[i])
-    #here to have displayed timestamps
-    if i % 100 == 0:
-        #x1[i] = t1[i]   
+    #here to have displayed timestamps(must be same increment as generic graph)
+    if i % 5 == 0:  
         #getting data for x-axis
-        x1_b[i] = t1_both[i]
+        x1_b[i] = t1[i]
     i+=1
 #testing
 #print(x1_b)
+#list to hold the month and day corresponding to each dashed line plotted 
+x2_month_dates = [x2_b[0]]
 #now for the positions of the dashed lines being a day between each other for room data
 i = 1
 while i != len(t2):
@@ -182,6 +162,7 @@ while i != len(t1):
 #room plot
 fig, ax = plt.subplots()
 ax.set_xticks(x2_positions)
+#plt.figure()
 for x in x2_positions:
     plt.axvline(x=x, color = 'grey', linestyle = '--', linewidth = 2)
 plt.plot(t2,room_temp, label='Room Temp', color = 'blue')
@@ -196,36 +177,19 @@ plt.xticks(rotation = 30)
 plt.show()
 
 #chamber plot
-#fig, ax = plt.subplots()
 plt.figure()
-#twin1 = ax.twinx()
-#twin2 = ax.twinx()
-'''Trying to separate the y axes 
-p1 = ax.plot(t1,RH1, label = '%RH', color = 'blue')
-#plt.plot(RH1, label = '%RH', color = 'blue')
-p2 = twin1.plot(t1,chamber_temp, label='Chamber Temp', color = 'green')
-#plt.plot(chamber_temp, label = 'Chamber Temp', color = 'green')
-p3 = twin2.plot(t1,chamber_dew_point, label = 'Dew Point', color = 'red')
-#plt.plot(chamber_dew_point, label = 'Dew Point', color = 'red')
-'''
 plt.plot(t1,RH1, label = '%RH', color = 'blue')
 #plt.plot(RH1, label = '%RH', color = 'blue')
 plt.plot(t1,chamber_temp, label='Chamber Temp', color = 'red')
 #plt.plot(chamber_temp, label = 'Chamber Temp', color = 'green')
 plt.plot(t1,chamber_dew_point, label = 'Dew Point', color = 'maroon')
 #plt.plot(chamber_dew_point, label = 'Dew Point', color = 'red')
-'''
-ax.set_xlim(0, len(t1))
-ax.set_ylim(-75,75)
-twin1.set_ylim(-75,75)
-twin2.set_ylim(-75,75)
-'''
 plt.xlim(0, len(t1))
 plt.ylim(-75,75)
 #labels now with parameters above
 plt.xlabel("Time")
 plt.ylabel("%RH, Chamber Temp, and Dew Point")
-plt.title("Chamber %RH, Temp, and Dew Point vs. Time (Rm. 2118)")
+plt.title("Climate Monitoring of TC in Rm. 2118")
 plt.xticks(t1,x1_b)
 plt.legend()
 plt.xticks(rotation = 30)
