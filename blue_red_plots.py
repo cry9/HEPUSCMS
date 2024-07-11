@@ -210,9 +210,9 @@ p3 = twin2.plot(t1,chamber_dew_point, label = 'Dew Point', color = 'red')
 '''
 plt.plot(t1,RH1, label = '%RH', color = 'blue')
 #plt.plot(RH1, label = '%RH', color = 'blue')
-plt.plot(t1,chamber_temp, label='Chamber Temp', color = 'orange')
+plt.plot(t1,chamber_temp, label='Chamber Temp', color = 'red')
 #plt.plot(chamber_temp, label = 'Chamber Temp', color = 'green')
-plt.plot(t1,chamber_dew_point, label = 'Dew Point', color = 'red')
+plt.plot(t1,chamber_dew_point, label = 'Dew Point', color = 'maroon')
 #plt.plot(chamber_dew_point, label = 'Dew Point', color = 'red')
 '''
 ax.set_xlim(0, len(t1))
