@@ -105,7 +105,7 @@ while i != len(t1):
     #testing
     #print(t1_both[i])
     #here to have displayed timestamps(must be same increment as generic graph)
-    if i % 20 == 0:  
+    if i % 5 == 0:  
         #getting data for x-axis
         x1_b[i] = t1[i]
     i+=1
@@ -166,7 +166,9 @@ ax.set_xticks(x2_positions)
 for x in x2_positions:
     plt.axvline(x=x, color = 'grey', linestyle = '--', linewidth = 2)
 plt.plot(t2,room_temp, label='Room Temp', color = 'blue')
-#plt.plot(room_temp )
+'''
+plt.plot(room_temp )
+'''
 plt.ylabel("Room Temperature (Deg C)")
 plt.xlabel("Time")
 plt.title("Room Temp vs. Time (Rm. 2118)")
@@ -179,11 +181,17 @@ plt.show()
 #chamber plot
 plt.figure()
 plt.plot(t1,RH1, label = '%RH', color = 'blue')
-#plt.plot(RH1, label = '%RH', color = 'blue')
+'''
+plt.plot(RH1, label = '%RH', color = 'blue')
+'''
 plt.plot(t1,chamber_temp, label='Chamber Temp', color = 'red')
-#plt.plot(chamber_temp, label = 'Chamber Temp', color = 'green')
+'''
+plt.plot(chamber_temp, label = 'Chamber Temp', color = 'green')\
+'''
 plt.plot(t1,chamber_dew_point, label = 'Dew Point', color = 'maroon')
-#plt.plot(chamber_dew_point, label = 'Dew Point', color = 'red')
+'''
+plt.plot(chamber_dew_point, label = 'Dew Point', color = 'red')
+'''
 plt.xlim(0, len(t1))
 plt.ylim(-75,75)
 #labels now with parameters above
