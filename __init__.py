@@ -8,7 +8,7 @@ Created on Tue Aug  6 14:31:59 2024
 
 
 '''
-In order to get the best results from the program "blue_red_plots.py": 
+In order to get the best results from the program "blue_red_plots.py", make sure that the .csv files for the room and TC are in the same directory as "blue_red_plots.py" and execute the following: 
 1. Comment out lines 163, 164, 166, 167, 168, 175, and 176
 2. Comment out lines 181, 183, 185, 193, 194, and 195
 3. Uncomment lines 165, 169, 182, 184, 186
