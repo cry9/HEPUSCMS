@@ -105,7 +105,7 @@ while i != len(t1):
     #testing
     #print(t1_both[i])
     #here to have displayed timestamps(must be same increment as generic default graph)
-    if i % 20 == 0:  
+    if i % 100 == 0:  
         #getting data for x-axis
         x1_b[i] = t1[i]
     i+=1
