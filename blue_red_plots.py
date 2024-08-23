@@ -66,24 +66,24 @@ data2_reverse_rows = data2.iloc[::-1, :]
 
 #selecting specific columns to keep in the data frame for earlier data set
 #saving the necessary column with the corrected reversed rows in the appropriate list
-room_temp = data1_reverse_rows['RA3E-F52ABC Red [Temperature](1)Temperature(F°)'].tolist()
+room_temp = data1_reverse_rows['RA3E-F52ABC 2118 T&H Sensor [Temperature & Humidity](2)Temperature(F°)'].tolist()
 #higher temperature values now as one data set saved to the appropriate list
-chamber_temp = frame1_reverse_rows['RA3E-F52ABC Blue [Temperature & Humidity](2)Temperature(F°)'].tolist()
+chamber_temp = frame1_reverse_rows['RA12S-705FAC Thermal Chamber T&H Sensor [Temperature & Humidity](2)Temperature(F°)'].tolist()
 #Now the temperature values in fahrenheit for the dry storage
 dry_storage = data2_reverse_rows['RA12S-705FAC Big Dry Storage T&H Sensor [Temperature & Humidity](3)Temperature(F°)'].tolist()
 #%RH for earlier data thermal chamber
-RH1 = frame1_reverse_rows['RA3E-F52ABC Blue [Temperature & Humidity](2)Humidity(%RH)'].tolist()
+RH1 = frame1_reverse_rows['RA12S-705FAC Thermal Chamber T&H Sensor [Temperature & Humidity](2)Humidity(%RH)'].tolist()
 #%RH for dry storage
 RH2 = data2_reverse_rows['RA12S-705FAC Big Dry Storage T&H Sensor [Temperature & Humidity](3)Humidity(%RH)'].tolist()
-#t2 is for the room data and t1 is for the chamber data, similarly for x2 and x1
+#t2 is for the room data and t1 is for the chamber data, similarly for x2 and x1 (3 is dry storage)
 t2 = data1_reverse_rows['Timestamp (America/Chicago)'].tolist()
 t1 = frame1_reverse_rows['Timestamp (America/Chicago)'].tolist()
 t3 = data2_reverse_rows['Timestamp (America/Chicago)'].tolist() # for dry storage
 #creating empty lists with as many entries as rows in each respective .csv file
 x2_b = ['']*len(t2)
 x1_b = ['']*len(t1)
-x3_b = ['']*len(t3)
-#for only the days to save for the room
+x3_b= ['']*len(t3)
+#for only the days to save for the room chamber and storage
 t2_days = [None]*len(t2)
 t2_both = [None]*len(t2)
 t1_days = [None]*len(t1)
@@ -117,7 +117,7 @@ while i != len(t2):
     #testing
     #print(t2_days[i])
     #this needs to be the same interval as the one between each x-axis on the default plot
-    if i % 50 == 0:
+    if i % 25 == 0:
         #this is saving the whole time stamp
         #x2[i] = t2[i]
         #so that we get month and day data for each line on the x-axis
@@ -125,6 +125,9 @@ while i != len(t2):
     
     #incrementing
     i += 1
+'''
+#uncomment this block if the data in your .csv file for the dry storage is 2 days or longer
+
 #making axes for both of our eventually plotted graphs next the dry storage
 i = 0
 while i != len(t3):
@@ -160,20 +163,22 @@ while i != len(t3):
     
     #incrementing
     i += 1
-    
+'''    
+#If one were to make  dashed lines for the chamber
+#they should uncomment the above block and add a new block for the chamber following the lead of the above block
 #now the chamber needs labels for the x-axis, this is in under the below block
 i = 0
 while i != len(t1):
     #testing
     #print(t1_both[i])
     #here to have displayed timestamps(must be same increment as generic default graph)
-    if i % 100 == 0:  
+    if i % 20 == 0:  
         #getting data for x-axis
         x1_b[i] = t1[i]
     i+=1
 #testing
 #print(x1_b)
-#list to hold the month and day corresponding to each dashed line plotted 
+#list to hold the month and day corresponding to each dashed line plotted for room data
 x2_month_dates = [x2_b[0]]
 #now for the positions of the dashed lines being a day between each other for room data
 i = 1
@@ -187,21 +192,22 @@ while i != len(t2):
     else:
         x2_month_dates.append('')
     i += 1
-    
-#list to hold the month and day corresponding to each dashed line plotted 
+
+
+
+#list to hold the month and day corresponding to each dashed line plotted if dashed lines are desired
 x3_month_dates = [x3_b[0]]
-#now for the positions of the dashed lines being a day between each other for room data
-i = 1
+#now the storage needs labels for the x-axis, this is in under the below block
+i = 0
 while i != len(t3):
-    if int(t3_days[i]) != int(t3_days[i-1]):
-        #for the x-axis position of dashed lines
-        x3_positions.append(i) 
-        #for the x-axis labels planned to correspond with respective dashed lines
-        x3_month_dates.append(t3_both[i])#NEW
-    
-    else:
-        x3_month_dates.append('')
-    i += 1
+    #testing
+    #print(t3_both[i])
+    #here to have displayed timestamps(must be same increment as generic default graph)
+    if i % 2 == 0:  
+        #getting data for x-axis
+        x3_b[i] = t3[i]
+    i+=1
+
 #testing
 #print(x2_month_dates)
 #print(x2_b)
@@ -219,6 +225,7 @@ while i != len(t1):
     chamber_temp[i] = (5/9)*(chamber_temp[i]-32)
     i+=1  
 #and the dry storage
+i = 0
 while i != len(t3):
     dry_storage[i] = (5/9)*(dry_storage[i]-32)
     i+=1  
@@ -274,7 +281,7 @@ plt.xlim(0, len(t1))
 plt.ylim(-75,75)
 #labels now with parameters above
 plt.xlabel("Time")
-plt.ylabel("%RH, Chamber Temp, and Dew Point")
+plt.ylabel("%RH, Chamber Temp(degC) and Dew Point")
 plt.title("Climate Monitoring of TC in Rm. 2118")
 #plt.xticks(t1,x1_b)
 plt.legend()
@@ -295,6 +302,6 @@ plt.xlabel("Time")
 plt.title("Storage Temp vs. Time (Rm. 2118)")
 plt.ylim(0,40)
 plt.xlim(0,len(t3))
-#plt.xticks(t3, x3_month_dates)
+#plt.xticks(t3, x3_b)
 #plt.xticks(rotation = 30)
 plt.show()
