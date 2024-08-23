@@ -271,6 +271,9 @@ plt.xticks(t2, x2_month_dates)
 plt.xticks(rotation = 30)
 plt.show()
 
+#If dashed lines are desired for the chamber and dry storage, 
+#follow the format of the above block of code for the room plot
+
 #chamber plot
 plt.figure()
 plt.plot(t1,RH1, label = '%RH', color = 'blue')
